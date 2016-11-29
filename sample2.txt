@@ -1,0 +1,10 @@
+Hello, World! What a great day to be alive.
+
+By virtue of existing solely for testing, this file has no obligation of being
+of any use to any one or any thing at all other than, of course, the Makefile.
+The file wishes to extend its apologies to any reader unfortunate enough to
+come across it but remains in the hope that if not useful, it might at least
+have been found entertaining.
+
+Sincerely,
+This file

@@ -17,17 +17,18 @@ Sample
 ------
 
 ```bash
-echo 'Hello, World! What a great day to be alive.' > sample.txt
+echo 'Hello, World! What a great day to be alive' > sample.txt
 jsinc sample.txt > sample.txt.js
 ```
 
 The resulting JavaScript file looks like this:
 
 ```javascript
+
 ; window['sample.txt'] = new Uint32Array([
     0x6C6C6548, 0x57202C6F, 0x646C726F, 0x68572021, 0x61207461, 0x65726720,
-    0x64207461, 0x74207961, 0x6562206F, 0x696C6120, 0x0A2E6576
-]).buffer.slice(0, 44);
+    0x64207461, 0x74207961, 0x6562206F, 0x696C6120, 0x000A6576
+]).buffer.slice(0, 43);
 ```
 
 Use the file like so:
@@ -50,7 +51,7 @@ Use the file like so:
 </html>
 ```
 
-This will output `Hello, World! What a great day to be alive.`.
+This will output `Hello, World! What a great day to be alive`.
 
 
 Advanced
@@ -70,8 +71,8 @@ This yields:
 ```javascript
 define("sample.txt", function() { return new Uint32Array([
     0x6C6C6548, 0x57202C6F, 0x646C726F, 0x68572021, 0x61207461, 0x65726720,
-    0x64207461, 0x74207961, 0x6562206F, 0x696C6120, 0x0A2E6576
-]).buffer.slice(0, 44); });
+    0x64207461, 0x74207961, 0x6562206F, 0x696C6120, 0x000A6576
+]).buffer.slice(0, 43); });
 ```
 
 

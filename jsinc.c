@@ -37,6 +37,7 @@ int main(int argc, const char *argv[])
 	const char *prefix = NULL;
 	const char *suffix = NULL;
 	int i, c, n;
+	long len;
 	FILE *in;
 
 	for (i = 1; i < argc; i++) {
@@ -100,8 +101,13 @@ int main(int argc, const char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	printf("\n]).buffer.slice(0, %ld)%s\n", ftell(in),
-		suffix ? suffix : ";");
+	len = ftell(in);
+	if (len % 4) {
+		printf("\n]).buffer.slice(0, %ld)%s\n", len,
+			suffix ? suffix : ";");
+	} else {
+		printf("\n]).buffer%s\n", suffix ? suffix : ";");
+	}
 
 	fclose(in);
 	return 0;
