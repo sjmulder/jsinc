@@ -1,4 +1,4 @@
-JS Inc. ![CI status](https://travis-ci.org/sjmulder/jsinc.svg?branch=master)
+JS Inc. [![Build Status](https://travis-ci.org/sjmulder/jsinc.svg?branch=master)](https://travis-ci.org/sjmulder/jsinc)
 =======
 
 Convert any file into a JavaScript ArrayBuffer.
