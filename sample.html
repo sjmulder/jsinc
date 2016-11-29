@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>JS Inc. test page</title>
+    </head> 
+    <body>
+        <script src="sample.txt.js"></script>
+        <script>
+            var bytes = new Uint8Array(window['sample.txt']);
+            var str = String.fromCharCode.apply(null, bytes);
+            document.write(str);
+        </script>
+    </body>
+</html>
