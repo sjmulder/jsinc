@@ -8,6 +8,7 @@ bindir ?= $(prefix)/bin
 all: jsinc
 
 check: jsinc
+	./jsinc 2> /dev/null
 	./jsinc -v > /dev/null
 	./jsinc --version > /dev/null
 	./jsinc sample.txt | diff -u sample.txt.js -
