@@ -1,0 +1,23 @@
+CFLAGS += -std=c89 -Wall
+LDLIBS += -lws2_32
+
+#RUN = wine
+RUN  =
+DIFF = diff -uw
+
+all: jsinc.exe
+
+jsinc.exe: jsinc.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+check: jsinc.exe
+	$(RUN) ./jsinc.exe 2> /dev/null
+	$(RUN) ./jsinc.exe -v > /dev/null
+	$(RUN) ./jsinc.exe --version > /dev/null
+	$(RUN) ./jsinc.exe sample.txt | $(DIFF) sample.txt.js -
+	$(RUN) ./jsinc.exe sample2.txt \
+		-p 'define("sample2.txt", function() { return' \
+		-P '; });' | $(DIFF) sample2.txt.js -
+
+clean:
+	rm -f jsinc.exe

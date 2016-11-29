@@ -1,7 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <arpa/inet.h>
+
+#ifdef _WIN32
+# include <winsock2.h>
+#else
+# include <arpa/inet.h>
+#endif
 
 #define PROG_NAME "jsinc"
 #define PROG_VER  "1.0"
@@ -88,9 +93,9 @@ int main(int argc, const char *argv[])
 		if ((c = fgetc(in)) != EOF) n |= c << 8;
 		if ((c = fgetc(in)) != EOF) n |= c;
 
-		     if (i%6) printf(   ", 0x%08X", htonl(n));
-		else if (i)   printf(",\n\t0x%08X", htonl(n));
-		else          printf( "\n\t0x%08X", htonl(n));
+		     if (i%6) printf(   ", 0x%08X", (int)htonl(n));
+		else if (i)   printf(",\n\t0x%08X", (int)htonl(n));
+		else          printf( "\n\t0x%08X", (int)htonl(n));
 
 		i++;
 	}
