@@ -1,7 +1,9 @@
 language: c
 script: make check dist
 env:
-  global: DISTNAME=jsinc-${TRAVIS_TAG:-dev}
+  global:
+  - CFLAGS="$CFLAGS -DPROG_VER=${TRAVIS_TAG:-dev}"
+  - DISTNAME=jsinc-${TRAVIS_TAG:-dev}
 deploy:
   provider: releases
   file: $DISTNAME.zip
@@ -16,7 +18,7 @@ matrix:
 
   # Linux 32 bit
   - compiler: clang
-    env: DISTNAME=$DISTNAME-linux-i386 CFLAGS=-m32
+    env: DISTNAME=$DISTNAME-linux-i386 CFLAGS="$CFLAGS -m32"
     addons:
       apt:
         packages:
@@ -24,7 +26,7 @@ matrix:
 
   # Linux 64 bit
   - compiler: clang
-    env: DISTNAME=$DISTNAME-linux-x86_64 CFLAGS=-m64
+    env: DISTNAME=$DISTNAME-linux-x86_64 CFLAGS="$CFLAGS -m64"
 
   # Linux ARM (Raspberry Pi)
   - compiler: arm-linux-gnueabihf-gcc
@@ -41,7 +43,7 @@ matrix:
   # Mac
   - compiler: clang
     os: osx
-    env: DISTNAME=$DISTNAME-macos CFLAGS="-arch i386 -arch x86_64"
+    env: DISTNAME=$DISTNAME-macos CFLAGS="$CFLAGS -arch i386 -arch x86_64"
 
   # Windows 32 bit
   - compiler: i686-w64-mingw32-gcc
