@@ -18,7 +18,7 @@
 "  -v           Print version number and exit.\n"                \
 "  -m <style>   Use module style, see below. Default: global\n"  \
 "  -p <prefix>  Text to prepend to the output\n"                 \
-"  -P <suffix>  Text to append to the output\n\n"                \
+"  -s <suffix>  Text to append to the output\n\n"                \
 "Supported module styles:\n"                                     \
 "  global    ; window['<file>'] = ...;\n"                        \
 "  amd       ; define('<file>', function() { return  ...; });\n" \
@@ -94,9 +94,9 @@ int main(int argc, const char *argv[])
 			require_unset(prefix, "prefix (-p)");
 			require_arg(i, argc, "-p");
 			prefix = argv[++i];
-		} else if (!strcmp(argv[i], "-P")) {
-			require_unset(suffix, "suffix (-P)");
-			require_arg(i, argc, "-P");
+		} else if (!strcmp(argv[i], "-s")) {
+			require_unset(suffix, "suffix (-s)");
+			require_arg(i, argc, "-s");
 			suffix = argv[++i];
 		} else if (argv[i][0] == '-') {
 			fprintf(stderr, PROG_NAME ": unknown argument: %s\n",

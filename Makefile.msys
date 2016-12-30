@@ -28,7 +28,7 @@ check: jsinc.exe
 		| $(DIFF)          fixtures/long.txt-none.js -
 	$(RUN) ./jsinc fixtures/long.txt \
 		-p "; define('fixtures/long.txt', function() { return " \
-		-P '; });' | $(DIFF) fixtures/long.txt-amd.js -
+		-s '; });' | $(DIFF) fixtures/long.txt-amd.js -
 
 clean:
 	rm -f jsinc.exe

@@ -24,7 +24,7 @@ check: jsinc
 		| diff -u   fixtures/long.txt-none.js -
 	./jsinc fixtures/long.txt \
 		-p "; define('fixtures/long.txt', function() { return " \
-		-P '; });' | diff -u fixtures/long.txt-amd.js -
+		-s '; });' | diff -u fixtures/long.txt-amd.js -
 
 clean:
 	rm -f jsinc
