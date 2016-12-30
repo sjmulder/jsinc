@@ -10,6 +10,6 @@ addons:
      - wine1.4-i386
      - wine1.4
 script:
- - make check CC=clang
- - make check CC=gcc
- - make check -f Makefile.msys CC=i686-w64-mingw32-gcc RUN=wine
+ - make clean check CC=clang
+ - make clean check CC=gcc
+ - make clean check -f Makefile.msys CC=i686-w64-mingw32-gcc RUN=wine
