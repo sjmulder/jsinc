@@ -4,7 +4,7 @@ script: make check
 matrix:
   include:
 
-  # Clang 32 bit
+  # Linux 32 bit
   - compiler: clang
     env: CFLAGS=-m32
     addons:
@@ -12,19 +12,11 @@ matrix:
         packages:
         - gcc-multilib
 
-  # Clang 64 bit
+  # Linux 64 bit
   - compiler: clang
     env: CFLAGS=-m64
 
-  # GCC
-  - compiler: gcc
-
-  # Mac
-  - compiler: clang
-    os: osx
-    env: CFLAGS="-arch i386 -arch x86_64"
-
-  # ARM Linux (Raspberry Pi)
+  # Linux ARM (Raspberry Pi)
   - compiler: arm-linux-gnueabihf-gcc
     dist: trusty
     sudo: false
@@ -34,6 +26,11 @@ matrix:
         packages:
         - libc6-dev-armhf-cross
         - gcc-arm-linux-gnueabihf
+
+  # Mac
+  - compiler: clang
+    os: osx
+    env: CFLAGS="-arch i386 -arch x86_64"
 
   # Windows 32 bit
   - compiler: i686-w64-mingw32-gcc
