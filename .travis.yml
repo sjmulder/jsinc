@@ -24,6 +24,17 @@ matrix:
     os: osx
     env: CFLAGS="-arch i386 -arch x86_64"
 
+  # ARM Linux (Raspberry Pi)
+  - compiler: arm-linux-gnueabihf-gcc
+    dist: trusty
+    sudo: false
+    script: make
+    addons:
+      apt:
+        packages:
+        - libc6-dev-armhf-cross
+        - gcc-arm-linux-gnueabihf
+
   # Windows 32 bit
   - compiler: i686-w64-mingw32-gcc
     env: RUN=wine
