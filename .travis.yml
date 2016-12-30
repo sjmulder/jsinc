@@ -3,13 +3,14 @@ addons:
   apt:
     packages:
      - binutils-mingw-w64-i686
-     - mingw-w64-dev
-     - gcc-mingw-w64-base
+     - binutils-mingw-w64-x86-64
+     - gcc-multilib
      - gcc-mingw-w64-i686
-     - wine1.4-common
-     - wine1.4-i386
+     - gcc-mingw-w64-x86-64
      - wine1.4
 script:
- - make clean check CC=clang
- - make clean check CC=gcc
- - make clean check -f Makefile.msys CC=i686-w64-mingw32-gcc RUN=wine
+ - CC=clang CFLAGS=-m32 make clean check
+ - CC=clang CFLAGS=-m64 make clean check
+ - CC=gcc               make clean check
+ - CC=i686-w64-mingw32-gcc   RUN=wine   make clean check -f Makefile.msys
+ - CC=x86_64-w64-mingw32-gcc RUN=wine64 make clean check -f Makefile.msys
