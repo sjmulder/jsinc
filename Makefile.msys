@@ -1,9 +1,9 @@
 CFLAGS += -std=c89 -Wall
 LDLIBS += -lws2_32
 
-#RUN = wine
-RUN  =
-DIFF = diff -uw
+#RUN ?= wine
+RUN  ?=
+DIFF ?= diff -uw
 
 all: jsinc.exe
 
