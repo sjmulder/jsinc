@@ -1,16 +1,42 @@
 language: c
-addons:
-  apt:
-    packages:
-     - binutils-mingw-w64-i686
-     - binutils-mingw-w64-x86-64
-     - gcc-multilib
-     - gcc-mingw-w64-i686
-     - gcc-mingw-w64-x86-64
-     - wine1.4
-script:
- - CC=clang CFLAGS=-m32 make clean check
- - CC=clang CFLAGS=-m64 make clean check
- - CC=gcc               make clean check
- - CC=i686-w64-mingw32-gcc   RUN=wine   make clean check -f Makefile.msys
- - CC=x86_64-w64-mingw32-gcc RUN=wine64 make clean check -f Makefile.msys
+script: make check
+
+matrix:
+  include:
+
+  # Clang 32 bit
+  - compiler: clang
+    env: CFLAGS=-m32
+    addons:
+      apt:
+        packages:
+        - gcc-multilib
+
+  # Clang 64 bit
+  - compiler: clang
+    env: CFLAGS=-m64
+
+  # GCC
+  - compiler: gcc
+
+  # Windows 32 bit
+  - compiler: i686-w64-mingw32-gcc
+    env: RUN=wine
+    script: make -f Makefile.msys check
+    addons:
+      apt:
+        packages:
+        - binutils-mingw-w64-i686
+        - gcc-mingw-w64-i686
+        - wine1.4-i386
+
+  # Windows 64 bit
+  - compiler: x86_64-w64-mingw32-gcc
+    env: RUN=wine64
+    script: make -f Makefile.msys check
+    addons:
+      apt:
+        packages:
+        - binutils-mingw-w64-x86-64
+        - gcc-mingw-w64-x86-64
+        - wine1.4-amd64
