@@ -8,8 +8,15 @@ Usage: jsinc <options> <file>
 
 Options:
   -v           Print version number and exit.
-  -p <prefix>  Default:  window['<file>'] =
-  -P <suffix>  Default:  ;
+  -m <style>   Use module style, see below. Default: global
+  -p <prefix>  Text to prepend to the output
+  -P <suffix>  Text to append to the output
+
+Supported module styles:
+  global    ; window['<file>'] = ...;
+  amd       ; define('<file>', function() { return  ...; });
+  commonjs  module.exports = ...;
+  es6       export default ...;
 ```
 
 

@@ -11,15 +11,22 @@
 #define PROG_NAME "jsinc"
 #define PROG_VER  "1.0"
 
-#define PROG_USAGE                                    \
-"Convert any file into a JavaScript ArrayBuffer.\n\n" \
-"Usage: " PROG_NAME " <options> <file>\n\n"           \
-"Options:\n"                                          \
-"  -v           Print version number and exit.\n"     \
-"  -p <prefix>  Default:  window['<file>'] =\n"       \
-"  -P <suffix>  Default:  ;\n"
+#define PROG_USAGE                                               \
+"Convert any file into a JavaScript ArrayBuffer.\n\n"            \
+"Usage: " PROG_NAME " <options> <file>\n\n"                      \
+"Options:\n"                                                     \
+"  -v           Print version number and exit.\n"                \
+"  -m <style>   Use module style, see below. Default: global\n"  \
+"  -p <prefix>  Text to prepend to the output\n"                 \
+"  -P <suffix>  Text to append to the output\n\n"                \
+"Supported module styles:\n"                                     \
+"  global    ; window['<file>'] = ...;\n"                        \
+"  amd       ; define('<file>', function() { return  ...; });\n" \
+"  commonjs  module.exports = ...;\n"                            \
+"  es6       export default ...;\n"                              \
+"  none      ...\n"
 
-static void require_unset(const void* val, const char *name)
+static void require_unset(const void *val, const char *name)
 {
 	if (val) {
 		fprintf(stderr, PROG_NAME ": %s is already set\n", name);
@@ -36,11 +43,41 @@ static void require_arg(int i, int argc, const char *name)
 	}
 }
 
+struct module_style {
+	const char *name;
+	const char *prefix_fmt;
+	const char *tail;
+};
+
+static const struct module_style module_styles[] = {
+	{ "none",     "",                                    ""      },
+	{ "global",   "; window['%s'] = ",                   ";"     },
+	{ "amd",      "; define('%s', function() { return ", "; });" },
+	{ "commonjs", "module.exports = ",                   ";"     },
+	{ "es6",      "export default ",                     ";"     }
+};
+
+static const struct module_style *find_module_style(const char *name)
+{
+	int i;
+	size_t num_styles = sizeof(module_styles) / sizeof(module_styles[0]);
+
+	for (i = 0; i < num_styles; i++) {
+		if (!strcmp(module_styles[i].name, name)) {
+			return &module_styles[i];
+		}
+	}
+
+	return NULL;
+}
+
 int main(int argc, const char *argv[])
 {
 	const char *filename = NULL;
 	const char *prefix = NULL;
 	const char *suffix = NULL;
+	const char *stylearg = NULL;
+	const struct module_style *style;
 	int i, c, n;
 	long len;
 	FILE *in;
@@ -49,6 +86,10 @@ int main(int argc, const char *argv[])
 		if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
 			printf(PROG_VER "\n");
 			return 0;
+		} else if (!strcmp(argv[i], "-m")) {
+			require_unset(stylearg, "module style (-m)");
+			require_arg(i, argc, "-m");
+			stylearg = argv[++i];
 		} else if (!strcmp(argv[i], "-p")) {
 			require_unset(prefix, "prefix (-p)");
 			require_arg(i, argc, "-p");
@@ -67,6 +108,14 @@ int main(int argc, const char *argv[])
 		}
 	}
 
+	if (!stylearg) stylearg = "global";
+	style = find_module_style(stylearg);
+	if (!style) {
+		fprintf(stderr, PROG_NAME ": unknown module style: %s\n",
+			stylearg);
+		exit(EXIT_FAILURE);
+	}
+
 	if (!filename) {
 		if (argc > 1) {
 			fprintf(stderr, PROG_NAME ": no filename given\n");
@@ -83,8 +132,10 @@ int main(int argc, const char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	if (prefix) printf("%s new Uint32Array([", prefix);
-	else        printf("; window['%s'] = new Uint32Array([", filename);
+	if (prefix) printf("%s", prefix);
+	else        printf(style->prefix_fmt, filename);
+
+	printf("new Uint32Array([");
 
 	i = 0;
 	while ((c = fgetc(in)) != EOF) {
@@ -107,13 +158,10 @@ int main(int argc, const char *argv[])
 	}
 
 	len = ftell(in);
-	if (len % 4) {
-		printf("\n]).buffer.slice(0, %ld)%s\n", len,
-			suffix ? suffix : ";");
-	} else {
-		printf("\n]).buffer%s\n", suffix ? suffix : ";");
-	}
+	if (len % 4) printf("\n]).buffer.slice(0, %ld)", len);
+	else         printf("\n]).buffer");
 
+	printf("%s\n", suffix ? suffix : style->tail);
 	fclose(in);
 	return 0;
 }

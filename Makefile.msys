@@ -11,13 +11,24 @@ jsinc.exe: jsinc.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 check: jsinc.exe
-	$(RUN) ./jsinc.exe 2> /dev/null
-	$(RUN) ./jsinc.exe -v > /dev/null
-	$(RUN) ./jsinc.exe --version > /dev/null
-	$(RUN) ./jsinc.exe sample.txt | $(DIFF) sample.txt.js -
-	$(RUN) ./jsinc.exe sample2.txt \
-		-p 'define("sample2.txt", function() { return' \
-		-P '; });' | $(DIFF) sample2.txt.js -
+	$(RUN) ./jsinc 2> /dev/null
+	$(RUN) ./jsinc -v > /dev/null
+	$(RUN) ./jsinc --version > /dev/null
+	$(RUN) ./jsinc fixtures/short.txt | $(DIFF) fixtures/short.txt.js -
+	$(RUN) ./jsinc fixtures/long.txt  | $(DIFF) fixtures/long.txt.js  -
+	$(RUN) ./jsinc -m global   fixtures/long.txt \
+		| $(DIFF)          fixtures/long.txt.js -
+	$(RUN) ./jsinc -m amd      fixtures/long.txt \
+		| $(DIFF)          fixtures/long.txt-amd.js -
+	$(RUN) ./jsinc -m commonjs fixtures/long.txt \
+		| $(DIFF)          fixtures/long.txt-commonjs.js -
+	$(RUN) ./jsinc -m es6      fixtures/long.txt \
+		| $(DIFF)          fixtures/long.txt-es6.js -
+	$(RUN) ./jsinc -m none     fixtures/long.txt \
+		| $(DIFF)          fixtures/long.txt-none.js -
+	$(RUN) ./jsinc fixtures/long.txt \
+		-p "; define('fixtures/long.txt', function() { return " \
+		-P '; });' | $(DIFF) fixtures/long.txt-amd.js -
 
 clean:
 	rm -f jsinc.exe
