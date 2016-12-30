@@ -19,6 +19,11 @@ matrix:
   # GCC
   - compiler: gcc
 
+  # Mac
+  - compiler: clang
+    os: osx
+    env: CFLAGS="-arch i386 -arch x86_64"
+
   # Windows 32 bit
   - compiler: i686-w64-mingw32-gcc
     env: RUN=wine
