@@ -11,10 +11,20 @@ check: jsinc
 	./jsinc 2> /dev/null
 	./jsinc -v > /dev/null
 	./jsinc --version > /dev/null
-	./jsinc sample.txt | diff -u sample.txt.js -
-	./jsinc sample2.txt \
-		-p 'define("sample2.txt", function() { return' \
-		-P '; });' | diff -u sample2.txt.js -
+	./jsinc fixtures/short.txt | diff -u fixtures/short.txt.js -
+	./jsinc fixtures/long.txt  | diff -u fixtures/long.txt.js  -
+	./jsinc -m global   fixtures/long.txt | diff -u fixtures/long.txt.js -
+	./jsinc -m amd      fixtures/long.txt \
+		| diff -u   fixtures/long.txt-amd.js -
+	./jsinc -m commonjs fixtures/long.txt \
+		| diff -u   fixtures/long.txt-commonjs.js -
+	./jsinc -m es6      fixtures/long.txt \
+		| diff -u   fixtures/long.txt-es6.js -
+	./jsinc -m none     fixtures/long.txt \
+		| diff -u   fixtures/long.txt-none.js -
+	./jsinc fixtures/long.txt \
+		-p "; define('fixtures/long.txt', function() { return " \
+		-P '; });' | diff -u fixtures/long.txt-amd.js -
 
 clean:
 	rm -f jsinc
