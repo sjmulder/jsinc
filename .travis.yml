@@ -2,16 +2,11 @@ language: c
 addons:
   apt:
     packages:
-     - gcc-multilib
      - binutils-mingw-w64-i686
      - binutils-mingw-w64-x86-64
-     - mingw-w64-dev
-     - gcc-mingw-w64-base
+     - gcc-multilib
      - gcc-mingw-w64-i686
      - gcc-mingw-w64-x86-64
-     - wine1.4-common
-     - wine1.4-i386
-     - wine1.4-amd64
      - wine1.4
 script:
  - CC=clang CFLAGS=-m32 make clean check
