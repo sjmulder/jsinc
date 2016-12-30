@@ -10,7 +10,7 @@ Options:
   -v           Print version number and exit.
   -m <style>   Use module style, see below. Default: global
   -p <prefix>  Text to prepend to the output
-  -P <suffix>  Text to append to the output
+  -s <suffix>  Text to append to the output
 
 Supported module styles:
   global    ; window['<file>'] = ...;
@@ -64,13 +64,13 @@ This will output `Hello, World! What a great day to be alive`.
 Advanced
 --------
 
-To tweak the output, use the `-p` (prefix) and `-P` (suffix) options. For
+To tweak the output, use the `-p` (prefix) and `-s` (suffix) options. For
 example:
 
 ```bash
 jsinc sample.txt \
       -p 'define("sample.txt", function() { return' \
-      -P '; });'
+      -s '; });'
 ```
 
 This yields:
