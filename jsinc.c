@@ -9,7 +9,14 @@
 #endif
 
 #define PROG_NAME "jsinc"
-#define PROG_VER  "1.0"
+
+#ifdef PROG_VER
+# define STR_(x) #x
+# define STR(x)  STR_(x)
+# define PROG_VER_STR STR(PROG_VER)
+#else
+# define PROG_VER_STR "dev"
+#endif
 
 #define PROG_USAGE                                               \
 "Convert any file into a JavaScript ArrayBuffer.\n\n"            \
@@ -84,7 +91,7 @@ int main(int argc, const char *argv[])
 
 	for (i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
-			printf(PROG_VER "\n");
+			printf(PROG_VER_STR "\n");
 			return 0;
 		} else if (!strcmp(argv[i], "-m")) {
 			require_unset(stylearg, "module style (-m)");
