@@ -1,5 +1,15 @@
 language: c
-script: make check
-compiler:
-  - clang
-  - gcc
+addons:
+  apt:
+    packages:
+     - binutils-mingw-w64-i686
+     - mingw-w64-dev
+     - gcc-mingw-w64-base
+     - gcc-mingw-w64-i686
+     - wine1.4-common
+     - wine1.4-i386
+     - wine1.4
+script:
+ - make check CC=clang
+ - make check CC=gcc
+ - make check -f Makefile.msys CC=i686-w64-mingw32-gcc RUN=wine
