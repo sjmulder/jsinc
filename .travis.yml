@@ -1,12 +1,22 @@
 language: c
-script: make check
+script: make check dist
+env:
+  global: DISTNAME=jsinc-${TRAVIS_TAG:-dev}
+deploy:
+  provider: releases
+  file: $DISTNAME.zip
+  skip_cleanup: true
+  on:
+    tags: true
+  api_key:
+    secure: B440GDUMhZX5cJ6J7NsXL2467w79vVSPqQPIZfZYyJ5q1ZrZ5PJ3wftS2JH0ywiUhvUEY1leMA4ANxRt1eUbROZQExYsyCBiMvrVaFj5hk3LRF0XLD8Gsp+eLjTGRLG/ajI57PGZpsh95ZPv3TIwtOaet4LnXV4hPW0DX1u8egY3/DcF8o+J5bn/Jy8mcYTEKiMjCuNTC8pH7HQL5yxxzYUGCg1OGeNh/dhrkjqmoeYdvEGO+gQZehyg3XHpB6W7zQx7tojGV8y76H6pg9FdrkqnwbWqbtHN0u/9fP6IAwQ2nU5z8KZa+6p4S1XvfIdZ6GrVaBEx/iD54p4V9egipYDxIGy4zKHrgOgd84wF7RWC3ZxGJMk9AhxLZEU+tqZRSUUWPWV2oSjJ4PajNMTFbH6Y8iu4AhYAxCd+ghy62vR7++a121KHnWUx8GTLNIfZSc3Ze4a3b2i3gq7R3OykxvwXhGPU3enD9b+LS1YOBusFARYX0bwW1Ft8eB2siw5BiEnfp45CyoEzAOKe5VjCcxzVuVcjnGz/IVPt2F6PHqwB3Zy8sJBxveL8IPbmusazhcp6sijlkVZqFnkedSrm4MfNRWF9VJt7GQuv4umeKQeE078C8Ezuvu7HLMB6EC9TSb5ym/B/IEzW79tjlqW6Gd3PgCtBq2jtXZu0FXXnjDU=
 
 matrix:
   include:
 
   # Linux 32 bit
   - compiler: clang
-    env: CFLAGS=-m32
+    env: DISTNAME=$DISTNAME-linux-i386 CFLAGS=-m32
     addons:
       apt:
         packages:
@@ -14,13 +24,14 @@ matrix:
 
   # Linux 64 bit
   - compiler: clang
-    env: CFLAGS=-m64
+    env: DISTNAME=$DISTNAME-linux-x86_64 CFLAGS=-m64
 
   # Linux ARM (Raspberry Pi)
   - compiler: arm-linux-gnueabihf-gcc
+    env: DISTNAME=$DISTNAME-linux-armhf
     dist: trusty
     sudo: false
-    script: make
+    script: make dist
     addons:
       apt:
         packages:
@@ -30,12 +41,12 @@ matrix:
   # Mac
   - compiler: clang
     os: osx
-    env: CFLAGS="-arch i386 -arch x86_64"
+    env: DISTNAME=$DISTNAME-macos CFLAGS="-arch i386 -arch x86_64"
 
   # Windows 32 bit
   - compiler: i686-w64-mingw32-gcc
-    env: RUN=wine
-    script: make -f Makefile.msys check
+    env: DISTNAME=$DISTNAME-win32 RUN=wine
+    script: make -f Makefile.msys check dist
     addons:
       apt:
         packages:
@@ -45,8 +56,8 @@ matrix:
 
   # Windows 64 bit
   - compiler: x86_64-w64-mingw32-gcc
-    env: RUN=wine64
-    script: make -f Makefile.msys check
+    env: DISTNAME=$DISTNAME-win64 RUN=wine
+    script: make -f Makefile.msys check dist
     addons:
       apt:
         packages:

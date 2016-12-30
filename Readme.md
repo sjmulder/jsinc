@@ -89,6 +89,7 @@ Building
 ```bash
 make        # build
 make check  # test
+make dist   # creates a .zip of the binary
 make clean  # clean build products
 
 make install    # into /usr/local/bin by default

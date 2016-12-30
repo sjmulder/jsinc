@@ -1,9 +1,12 @@
 CFLAGS += -std=c89 -Wall
 LDLIBS += -lws2_32
 
+DISTNAME ?= jsinc
+
 #RUN ?= wine
 RUN  ?=
 DIFF ?= diff -uw
+ZIP  ?= zip
 
 all: jsinc.exe
 
@@ -33,4 +36,10 @@ check: jsinc.exe
 		-s '; });' | $(DIFF) fixtures/long.txt-amd.js -
 
 clean:
-	rm -f jsinc.exe
+	rm -f jsinc.exe $(DISTNAME)
+
+dist: $(DISTNAME).zip
+
+$(DISTNAME).zip: jsinc.exe
+	rm -f $(DISTNAME).zip
+	$(ZIP) $(DISTNAME).zip Readme.md Changelog.md jsinc.exe

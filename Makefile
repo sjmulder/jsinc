@@ -1,5 +1,7 @@
 CFLAGS += -std=c89 -Wall
 
+DISTNAME ?= jsinc
+
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
 
@@ -27,7 +29,13 @@ check: jsinc
 		-s '; });' | diff -u fixtures/long.txt-amd.js -
 
 clean:
-	rm -f jsinc
+	rm -f jsinc $(DISTNAME)
+
+dist: $(DISTNAME).zip
+
+$(DISTNAME).zip: jsinc
+	rm -f $(DISTNAME).zip
+	zip $(DISTNAME).zip Readme.md Changelog.md jsinc
 
 install: jsinc
 	mkdir -p $(bindir)
