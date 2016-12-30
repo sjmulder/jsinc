@@ -96,6 +96,18 @@ make install    # into /usr/local/bin by default
 make uninstall
 ```
 
+For Windows with MSYS:
+
+```bash
+make -f Makefile.msys
+make -f Makefile.msys check
+make -f Makefile.msys dist
+make -f Makefile.msys clean
+```
+
+See Makefile and Makefile.msys for more options, or .travis.yml for some
+examples on cross compiling and such.
+
 
 Authors
 -------
