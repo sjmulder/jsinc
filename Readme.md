@@ -9,6 +9,7 @@ Usage: jsinc <options> <file>
 Options:
   -v           Print version number and exit.
   -m <style>   Use module style, see below. Default: global
+  -f <format>  Use output format, see below. Default: arraybuf
   -p <prefix>  Text to prepend to the output
   -s <suffix>  Text to append to the output
 
@@ -17,6 +18,11 @@ Supported module styles:
   amd       ; define('<file>', function() { return  ...; });
   commonjs  module.exports = ...;
   es6       export default ...;
+  none      ...
+
+Supported output formats:
+  arraybuf  ArrayBuffer constructerd using a TypedArray
+  array     Array of byte values
 ```
 
 
@@ -64,8 +70,23 @@ This will output `Hello, World! What a great day to be alive`.
 Advanced
 --------
 
-To tweak the output, use the `-p` (prefix) and `-s` (suffix) options. For
-example:
+By default, an ArrayBuffer object is generated. This can be changed using the
+`-f` (output format) option. For example:
+
+```bash
+jsinc -f array sample.txt
+```
+
+```javascript
+; window['sample.txt'] = [
+     72,101,108,108,111, 44, 32, 87,111,114,108,100, 33, 32, 87,104, 97,
+    116, 32, 97, 32,103,114,101, 97,116, 32,100, 97,121, 32,116,111, 32,
+     98,101, 32, 97,108,105,118,101, 10
+];
+```
+
+The output can also be tweaked using the `-p` (prefix) and `-s` (suffix)
+options. For example:
 
 ```bash
 jsinc sample.txt \
