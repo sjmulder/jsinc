@@ -86,6 +86,8 @@ define("sample.txt", function() { return new Uint32Array([
 Building
 --------
 
+From a source distribution:
+
 ```bash
 make        # build
 make check  # test
