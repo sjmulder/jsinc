@@ -13,18 +13,19 @@ check: jsinc
 	./jsinc 2> /dev/null
 	./jsinc -v > /dev/null
 	./jsinc --version > /dev/null
-	./jsinc fixtures/short.txt | diff -u fixtures/short.txt.js -
-	./jsinc fixtures/long.txt  | diff -u fixtures/long.txt.js  -
-	./jsinc -m global   fixtures/long.txt | diff -u fixtures/long.txt.js -
-	./jsinc -m amd      fixtures/long.txt \
-		| diff -u   fixtures/long.txt-amd.js -
-	./jsinc -m commonjs fixtures/long.txt \
-		| diff -u   fixtures/long.txt-commonjs.js -
-	./jsinc -m es6      fixtures/long.txt \
-		| diff -u   fixtures/long.txt-es6.js -
-	./jsinc -m none     fixtures/long.txt \
-		| diff -u   fixtures/long.txt-none.js -
-	./jsinc fixtures/long.txt \
+	./jsinc -c fixtures/short.txt | diff -u fixtures/short.txt.js -
+	./jsinc -c fixtures/long.txt  | diff -u fixtures/long.txt.js  -
+	./jsinc -c -m global   fixtures/long.txt \
+		| diff -u      fixtures/long.txt.js -
+	./jsinc -c -m amd      fixtures/long.txt \
+		| diff -u      fixtures/long.txt-amd.js -
+	./jsinc -c -m commonjs fixtures/long.txt \
+		| diff -u      fixtures/long.txt-commonjs.js -
+	./jsinc -c -m es6      fixtures/long.txt \
+		| diff -u      fixtures/long.txt-es6.js -
+	./jsinc -c -m none     fixtures/long.txt \
+		| diff -u      fixtures/long.txt-none.js -
+	./jsinc -c fixtures/long.txt \
 		-p "; define('fixtures/long.txt', function() { return " \
 		-s '; });' | diff -u fixtures/long.txt-amd.js -
 

@@ -25,7 +25,8 @@
 "  -v           Print version number and exit.\n"                \
 "  -m <style>   Use module style, see below. Default: global\n"  \
 "  -p <prefix>  Text to prepend to the output\n"                 \
-"  -s <suffix>  Text to append to the output\n\n"                \
+"  -s <suffix>  Text to append to the output\n"                  \
+"  -c           Do not output a generator comment\n\n"           \
 "Supported module styles:\n"                                     \
 "  global    ; window['<file>'] = ...;\n"                        \
 "  amd       ; define('<file>', function() { return  ...; });\n" \
@@ -85,6 +86,7 @@ int main(int argc, const char *argv[])
 	const char *suffix = NULL;
 	const char *stylearg = NULL;
 	const struct module_style *style;
+	int nocomment = 0;
 	int i, c, n;
 	long len;
 	FILE *in;
@@ -105,6 +107,8 @@ int main(int argc, const char *argv[])
 			require_unset(suffix, "suffix (-s)");
 			require_arg(i, argc, "-s");
 			suffix = argv[++i];
+		} else if (!strcmp(argv[i], "-c")) {
+			nocomment = 1;
 		} else if (argv[i][0] == '-') {
 			fprintf(stderr, PROG_NAME ": unknown argument: %s\n",
 				argv[i]);
@@ -143,6 +147,9 @@ int main(int argc, const char *argv[])
 	else        printf(style->prefix_fmt, filename);
 
 	printf("new Uint32Array([");
+	if (!nocomment) {
+		printf("\n\t/* " PROG_NAME "-" PROG_VER_STR " */");
+	}
 
 	i = 0;
 	while ((c = fgetc(in)) != EOF) {

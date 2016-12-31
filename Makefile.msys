@@ -17,20 +17,20 @@ check: jsinc.exe
 	$(RUN) ./jsinc.exe 2> /dev/null
 	$(RUN) ./jsinc.exe -v > /dev/null
 	$(RUN) ./jsinc.exe --version > /dev/null
-	$(RUN) ./jsinc.exe             fixtures/short.txt \
-		| $(DIFF)              fixtures/short.txt.js -
-	$(RUN) ./jsinc.exe             fixtures/long.txt \
-		| $(DIFF)              fixtures/long.txt.js -
-	$(RUN) ./jsinc.exe -m global   fixtures/long.txt \
-		| $(DIFF)              fixtures/long.txt.js -
-	$(RUN) ./jsinc.exe -m amd      fixtures/long.txt \
-		| $(DIFF)              fixtures/long.txt-amd.js -
-	$(RUN) ./jsinc.exe -m commonjs fixtures/long.txt \
-		| $(DIFF)              fixtures/long.txt-commonjs.js -
-	$(RUN) ./jsinc.exe -m es6      fixtures/long.txt \
-		| $(DIFF)              fixtures/long.txt-es6.js -
-	$(RUN) ./jsinc.exe -m none     fixtures/long.txt \
-		| $(DIFF)              fixtures/long.txt-none.js -
+	$(RUN) ./jsinc.exe -c             fixtures/short.txt \
+		| $(DIFF)                 fixtures/short.txt.js -
+	$(RUN) ./jsinc.exe -c             fixtures/long.txt \
+		| $(DIFF)                 fixtures/long.txt.js -
+	$(RUN) ./jsinc.exe -c -m global   fixtures/long.txt \
+		| $(DIFF)                 fixtures/long.txt.js -
+	$(RUN) ./jsinc.exe -c -m amd      fixtures/long.txt \
+		| $(DIFF)                 fixtures/long.txt-amd.js -
+	$(RUN) ./jsinc.exe -c -m commonjs fixtures/long.txt \
+		| $(DIFF)                 fixtures/long.txt-commonjs.js -
+	$(RUN) ./jsinc.exe -c -m es6      fixtures/long.txt \
+		| $(DIFF)                 fixtures/long.txt-es6.js -
+	$(RUN) ./jsinc.exe -c -m none     fixtures/long.txt \
+		| $(DIFF)                 fixtures/long.txt-none.js -
 	$(RUN) ./jsinc.exe fixtures/long.txt \
 		-p "; define('fixtures/long.txt', function() { return " \
 		-s '; });' | $(DIFF) fixtures/long.txt-amd.js -
