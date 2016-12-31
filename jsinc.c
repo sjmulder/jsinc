@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <getopt.h>
 
 #ifdef _WIN32
 # include <winsock2.h>
@@ -34,23 +35,6 @@
 "  es6       export default ...;\n"                              \
 "  none      ...\n"
 
-static void require_unset(const void *val, const char *name)
-{
-	if (val) {
-		fprintf(stderr, PROG_NAME ": %s is already set\n", name);
-		exit(EXIT_FAILURE);
-	}
-}
-
-static void require_arg(int i, int argc, const char *name)
-{
-	if (i + 1 >= argc) {
-		fprintf(stderr, PROG_NAME
-			": %s requires an argument\n", name);
-		exit(EXIT_FAILURE);
-	}
-}
-
 struct module_style {
 	const char *name;
 	const char *prefix_fmt;
@@ -79,7 +63,7 @@ static const struct module_style *find_module_style(const char *name)
 	return NULL;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char **argv)
 {
 	const char *filename = NULL;
 	const char *prefix = NULL;
@@ -87,37 +71,46 @@ int main(int argc, const char *argv[])
 	const char *stylearg = NULL;
 	const struct module_style *style;
 	int nocomment = 0;
+	int opt;
 	int i, c, n;
 	long len;
 	FILE *in;
 
-	for (i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+	if (argc < 2) {
+		printf(PROG_USAGE);
+		exit(EXIT_SUCCESS);
+	}
+
+	if (argc > 1 && !strcmp(argv[1], "--version")) {
+		printf(PROG_VER_STR "\n");
+		exit(EXIT_SUCCESS);
+	}
+
+	while ((opt = getopt(argc, argv, "vm:p:s:c")) >= 0) {
+		switch (opt) {
+		case 'v':
 			printf(PROG_VER_STR "\n");
-			return 0;
-		} else if (!strcmp(argv[i], "-m")) {
-			require_unset(stylearg, "module style (-m)");
-			require_arg(i, argc, "-m");
-			stylearg = argv[++i];
-		} else if (!strcmp(argv[i], "-p")) {
-			require_unset(prefix, "prefix (-p)");
-			require_arg(i, argc, "-p");
-			prefix = argv[++i];
-		} else if (!strcmp(argv[i], "-s")) {
-			require_unset(suffix, "suffix (-s)");
-			require_arg(i, argc, "-s");
-			suffix = argv[++i];
-		} else if (!strcmp(argv[i], "-c")) {
-			nocomment = 1;
-		} else if (argv[i][0] == '-') {
-			fprintf(stderr, PROG_NAME ": unknown argument: %s\n",
-				argv[i]);
+			exit(EXIT_SUCCESS);
+
+		case 'm': stylearg = optarg; break;
+		case 'p': prefix = optarg; break;
+		case 's': suffix = optarg; break;
+		case 'c': nocomment = 1; break;
+
+		default:
 			exit(EXIT_FAILURE);
-		} else {
-			require_unset(filename, "filename");
-			filename = argv[i];
 		}
 	}
+
+	if (optind < argc-1) {
+		fprintf(stderr, PROG_NAME ": no filename given\n");
+		exit(EXIT_FAILURE);
+	} else if (optind > argc-1) {
+		fprintf(stderr, PROG_NAME ": too many arguments given\n");
+		exit(EXIT_FAILURE);
+	}
+
+	filename = argv[optind];
 
 	if (!stylearg) stylearg = "global";
 	style = find_module_style(stylearg);
@@ -125,16 +118,6 @@ int main(int argc, const char *argv[])
 		fprintf(stderr, PROG_NAME ": unknown module style: %s\n",
 			stylearg);
 		exit(EXIT_FAILURE);
-	}
-
-	if (!filename) {
-		if (argc > 1) {
-			fprintf(stderr, PROG_NAME ": no filename given\n");
-			exit(EXIT_FAILURE);
-		} else {
-			fprintf(stderr, "%s", PROG_USAGE);
-			return 0;
-		}
 	}
 
 	in = fopen(filename, "r");

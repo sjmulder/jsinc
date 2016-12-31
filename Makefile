@@ -15,19 +15,19 @@ check: jsinc
 	./jsinc --version > /dev/null
 	./jsinc -c fixtures/short.txt | diff -u fixtures/short.txt.js -
 	./jsinc -c fixtures/long.txt  | diff -u fixtures/long.txt.js  -
-	./jsinc -c -m global   fixtures/long.txt \
-		| diff -u      fixtures/long.txt.js -
-	./jsinc -c -m amd      fixtures/long.txt \
-		| diff -u      fixtures/long.txt-amd.js -
-	./jsinc -c -m commonjs fixtures/long.txt \
-		| diff -u      fixtures/long.txt-commonjs.js -
-	./jsinc -c -m es6      fixtures/long.txt \
-		| diff -u      fixtures/long.txt-es6.js -
-	./jsinc -c -m none     fixtures/long.txt \
-		| diff -u      fixtures/long.txt-none.js -
-	./jsinc -c fixtures/long.txt \
-		-p "; define('fixtures/long.txt', function() { return " \
-		-s '; });' | diff -u fixtures/long.txt-amd.js -
+	./jsinc -cm global   fixtures/long.txt \
+		| diff -u    fixtures/long.txt.js -
+	./jsinc -cm amd      fixtures/long.txt \
+		| diff -u    fixtures/long.txt-amd.js -
+	./jsinc -cm commonjs fixtures/long.txt \
+		| diff -u    fixtures/long.txt-commonjs.js -
+	./jsinc -cm es6      fixtures/long.txt \
+		| diff -u    fixtures/long.txt-es6.js -
+	./jsinc -cm none     fixtures/long.txt \
+		| diff -u    fixtures/long.txt-none.js -
+	./jsinc -p "; define('fixtures/long.txt', function() { return " \
+		-s '; });'  \
+		-c fixtures/long.txt | diff -u fixtures/long.txt-amd.js -
 
 clean:
 	rm -f jsinc $(DISTNAME)
