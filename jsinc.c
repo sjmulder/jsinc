@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 	FILE *in;
 
 	if (argc < 2) {
-		printf(PROG_USAGE);
+		fprintf(stderr, PROG_USAGE);
 		exit(EXIT_SUCCESS);
 	}
 
