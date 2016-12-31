@@ -103,10 +103,10 @@ int main(int argc, char **argv)
 	}
 
 	if (optind < argc-1) {
-		fprintf(stderr, PROG_NAME ": no filename given\n");
+		fprintf(stderr, PROG_NAME ": too many arguments given\n");
 		exit(EXIT_FAILURE);
 	} else if (optind > argc-1) {
-		fprintf(stderr, PROG_NAME ": too many arguments given\n");
+		fprintf(stderr, PROG_NAME ": no filename given\n");
 		exit(EXIT_FAILURE);
 	}
 
