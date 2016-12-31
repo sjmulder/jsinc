@@ -21,6 +21,10 @@ check: jsinc.exe
 		| $(DIFF)               fixtures/short.txt.js -
 	$(RUN) ./jsinc.exe -c           fixtures/long.txt \
 		| $(DIFF)               fixtures/long.txt.js -
+	$(RUN) ./jsinc.exe -cf array    fixtures/long.txt \
+		| $(DIFF)               fixtures/long.txt-array.js  -
+	$(RUN) ./jsinc.exe -cf arraybuf fixtures/long.txt \
+		| $(DIFF)               fixtures/long.txt.js  -
 	$(RUN) ./jsinc.exe -cm global   fixtures/long.txt \
 		| $(DIFF)               fixtures/long.txt.js -
 	$(RUN) ./jsinc.exe -cm amd      fixtures/long.txt \
