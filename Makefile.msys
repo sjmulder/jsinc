@@ -25,6 +25,8 @@ check: jsinc.exe
 		| $(DIFF)               fixtures/long.txt-array.js  -
 	$(RUN) ./jsinc.exe -cf arraybuf fixtures/long.txt \
 		| $(DIFF)               fixtures/long.txt.js  -
+	$(RUN) ./jsinc.exe -cf string   fixtures/long.txt \
+		| $(DIFF)               fixtures/long.txt-string.js  -
 	$(RUN) ./jsinc.exe -cf base64   fixtures/long.txt \
 		| $(DIFF)               fixtures/long.txt-base64.js  -
 	$(RUN) ./jsinc.exe -cm global   fixtures/long.txt \
