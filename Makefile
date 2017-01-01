@@ -16,9 +16,11 @@ check: jsinc
 	./jsinc -c fixtures/short.txt | diff -u fixtures/short.txt.js -
 	./jsinc -c fixtures/long.txt  | diff -u fixtures/long.txt.js  -
 	./jsinc -cf array    fixtures/long.txt \
-		| diff -u fixtures/long.txt-array.js  -
+		| diff -u    fixtures/long.txt-array.js  -
 	./jsinc -cf arraybuf fixtures/long.txt \
-		| diff -u fixtures/long.txt.js  -
+		| diff -u    fixtures/long.txt.js  -
+	./jsinc -cf base64   fixtures/long.txt \
+		| diff -u    fixtures/long.txt-base64.js  -
 	./jsinc -cm global   fixtures/long.txt \
 		| diff -u    fixtures/long.txt.js -
 	./jsinc -cm amd      fixtures/long.txt \

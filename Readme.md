@@ -74,7 +74,8 @@ By default, an ArrayBuffer object is generated. This can be changed using the
 `-f` (output format) option. For example:
 
 ```bash
-jsinc -f array sample.txt
+jsinc -f array  sample.txt
+jsinc -f base64 sample.txt
 ```
 
 ```javascript
@@ -83,6 +84,11 @@ jsinc -f array sample.txt
     116, 32, 97, 32,103,114,101, 97,116, 32,100, 97,121, 32,116,111, 32,
      98,101, 32, 97,108,105,118,101, 10
 ];
+```
+
+```javascript
+; window['sample.txt'] = 'SGVsbG8sIFdvcmxkISBXaGF0IGEgZ3JlYXQgZGF5IHRvIGJlIGFs
+aXZlCg==';
 ```
 
 The output can also be tweaked using the `-p` (prefix) and `-s` (suffix)

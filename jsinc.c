@@ -39,6 +39,9 @@
 "  arraybuf  ArrayBuffer constructerd using a TypedArray\n"        \
 "  array     Array of byte values\n"
 
+#define B64CHARS \
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
 struct module_style {
 	const char *name;
 	const char *prefix_fmt;
@@ -55,7 +58,8 @@ static const struct module_style module_styles[] = {
 
 enum output_format {
 	FORMAT_ARRAYBUF = 1,
-	FORMAT_ARRAY
+	FORMAT_ARRAY,
+	FORMAT_BASE64
 };
 
 static const struct module_style *find_module_style(const char *name)
@@ -76,6 +80,7 @@ static enum output_format get_output_format(const char *name)
 {
 	if (!strcmp(name, "arraybuf")) return FORMAT_ARRAYBUF;
 	if (!strcmp(name, "array"))    return FORMAT_ARRAY;
+	if (!strcmp(name, "base64"))   return FORMAT_BASE64;
 
 	return 0;
 }
@@ -124,6 +129,35 @@ static void write_array(FILE *file, const char *comment)
 	}
 
 	if (!ferror(file)) printf("\n]");
+}
+
+static void write_base64(FILE *file, const char *comment)
+{
+	int c, n, mod;
+
+	if (comment) printf("/* %s */ ", comment);
+	putchar('\'');
+
+	while ((c = fgetc(file)) != EOF) {
+		n = c << 16;
+		if ((c = fgetc(file)) != EOF) n |= c << 8;
+		if ((c = fgetc(file)) != EOF) n |= c;
+
+		mod = feof(file) ? ftell(file) % 3 : 0;
+
+		putchar(B64CHARS[(n >> 18) & 0x3F]);
+		putchar(B64CHARS[(n >> 12) & 0x3F]);
+
+		if (mod == 1) { printf("=="); break; }
+
+		putchar(B64CHARS[(n >> 6) & 0x3F]);
+
+		if (mod == 2) { printf("="); break; }
+
+		putchar(B64CHARS[n & 0x3F]);
+	}
+
+	putchar('\'');
 }
 
 int main(int argc, char **argv)
@@ -205,6 +239,7 @@ int main(int argc, char **argv)
 	switch (format) {
 	case FORMAT_ARRAYBUF: write_arraybuf(in, comment); break;
 	case FORMAT_ARRAY:    write_array(in, comment);    break;
+	case FORMAT_BASE64:   write_base64(in, comment);   break;
 
 	default:
 		fprintf(stderr, PROG_NAME ": don't know how to output in "
