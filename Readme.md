@@ -91,7 +91,7 @@ jsinc -f base64 sample.txt
 ```
 
 ```javascript
-; window['samle.txt'] = 'Hello, World! What a great day to be alive\n';
+; window['sample.txt'] = 'Hello, World! What a great day to be alive\n';
 ```
 
 ```javascript
