@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include <getopt.h>
 
 #ifdef _WIN32
@@ -38,6 +39,7 @@
 "Supported output formats:\n"                                      \
 "  arraybuf  ArrayBuffer constructerd using a TypedArray\n"        \
 "  array     Array of byte values\n"                               \
+"  string    A string (escaped where needed)\n"                    \
 "  base64    A base 64-encoded string\n"
 
 #define B64CHARS \
@@ -60,6 +62,7 @@ static const struct module_style module_styles[] = {
 enum output_format {
 	FORMAT_ARRAYBUF = 1,
 	FORMAT_ARRAY,
+	FORMAT_STRING,
 	FORMAT_BASE64
 };
 
@@ -81,6 +84,7 @@ static enum output_format get_output_format(const char *name)
 {
 	if (!strcmp(name, "arraybuf")) return FORMAT_ARRAYBUF;
 	if (!strcmp(name, "array"))    return FORMAT_ARRAY;
+	if (!strcmp(name, "string"))   return FORMAT_STRING;
 	if (!strcmp(name, "base64"))   return FORMAT_BASE64;
 
 	return 0;
@@ -130,6 +134,32 @@ static void write_array(FILE *file, const char *comment)
 	}
 
 	if (!ferror(file)) printf("\n]");
+}
+
+static void write_string(FILE *file, const char *comment)
+{
+	int c;
+
+	if (comment) printf("/* %s */ ", comment);
+	putchar('\'');
+
+	while ((c = fgetc(file)) != EOF) {
+		switch (c) {
+		case '\0': printf("\\0"); break;
+		case '\f': printf("\\f"); break;
+		case '\n': printf("\\n"); break;
+		case '\r': printf("\\r"); break;
+		case '\t': printf("\\t"); break;
+		case '\'': printf("\\\'"); break;
+		case '\\': printf("\\\\"); break;
+
+		default:
+			printf(isprint(c) ? "%c" : "\\x%02X", c);
+			break;
+		}
+	}
+
+	putchar('\'');
 }
 
 static void write_base64(FILE *file, const char *comment)
@@ -240,6 +270,7 @@ int main(int argc, char **argv)
 	switch (format) {
 	case FORMAT_ARRAYBUF: write_arraybuf(in, comment); break;
 	case FORMAT_ARRAY:    write_array(in, comment);    break;
+	case FORMAT_STRING:   write_string(in, comment);   break;
 	case FORMAT_BASE64:   write_base64(in, comment);   break;
 
 	default:

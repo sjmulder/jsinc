@@ -24,6 +24,7 @@ Supported module styles:
 Supported output formats:
   arraybuf  ArrayBuffer constructerd using a TypedArray
   array     Array of byte values
+  string    A string (escaped where needed)
   base64    A base 64-encoded string
 ```
 
@@ -77,6 +78,7 @@ By default, an ArrayBuffer object is generated. This can be changed using the
 
 ```bash
 jsinc -f array  sample.txt
+jsinc -f string sample.txt
 jsinc -f base64 sample.txt
 ```
 
@@ -86,6 +88,10 @@ jsinc -f base64 sample.txt
     116, 32, 97, 32,103,114,101, 97,116, 32,100, 97,121, 32,116,111, 32,
      98,101, 32, 97,108,105,118,101, 10
 ];
+```
+
+```javascript
+; window['samle.txt'] = 'Hello, World! What a great day to be alive\n';
 ```
 
 ```javascript
