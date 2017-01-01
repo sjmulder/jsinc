@@ -89,8 +89,8 @@ jsinc -f base64 sample.txt
 ```
 
 ```javascript
-; window['sample.txt'] = 'SGVsbG8sIFdvcmxkISBXaGF0IGEgZ3JlYXQgZGF5IHRvIGJlIGFs
-aXZlCg==';
+; window['sample.txt'] = 'SGVsbG8sIFdvcmxkISBXaGF0IGEgZ3JlYXQgZGF5IHRvIGJlIGF\
+saXZlCg==';
 ```
 
 The output can also be tweaked using the `-p` (prefix) and `-s` (suffix)
