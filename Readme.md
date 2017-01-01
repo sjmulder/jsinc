@@ -12,6 +12,7 @@ Options:
   -f <format>  Use output format, see below. Default: arraybuf
   -p <prefix>  Text to prepend to the output
   -s <suffix>  Text to append to the output
+  -c           Do not output a generator comment
 
 Supported module styles:
   global    ; window['<file>'] = ...;
