@@ -37,7 +37,8 @@
 "  none      ...\n\n"                                              \
 "Supported output formats:\n"                                      \
 "  arraybuf  ArrayBuffer constructerd using a TypedArray\n"        \
-"  array     Array of byte values\n"
+"  array     Array of byte values\n"                               \
+"  base64    A base 64-encoded string\n"
 
 #define B64CHARS \
 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"

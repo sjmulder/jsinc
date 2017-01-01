@@ -24,6 +24,7 @@ Supported module styles:
 Supported output formats:
   arraybuf  ArrayBuffer constructerd using a TypedArray
   array     Array of byte values
+  base64    A base 64-encoded string
 ```
 
 
